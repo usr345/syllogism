@@ -11,9 +11,9 @@ Definition e (Universum: Type) (S: Universum -> Prop) (P: Universum -> Prop) : P
 Definition o (Universum: Type) (S: Universum -> Prop) (P: Universum -> Prop) : Prop := exists x: Universum, S x -> not (P x).
 
 
-Theorem Barbara : forall Universum: Type, forall (S M P: Universum -> Prop), forall x: Universum, a Universum M P -> a Universum S M -> a Universum S P.
+Theorem Barbara : forall Universum: Type, forall (S M P: Universum -> Prop), a Universum M P -> a Universum S M -> a Universum S P.
 Proof.
-  intros Universum S M P x H1 H2. unfold a. intros x0 H3. apply H1. apply H2. apply H3.
+  intros Universum S M P H1 H2. unfold a. intros x H3. apply H1. apply H2. apply H3.
 Qed.
 
 Theorem Celarent : forall Universum: Type, forall (S M P: Universum -> Prop), e Universum M P -> a Universum S M -> e Universum S P.
@@ -34,32 +34,47 @@ Proof.
   intros Universum S M P H1 H2. unfold o. unfold e in H1. unfold i in H2. destruct H2 as [x H2]. destruct H2 as [H21 H22]. exists x. intro H3. specialize (H1 x). apply H1 in H22. exact H22.
 Qed.
 
-Theorem Barbari : forall Universum: Type, forall (S M P: Universum -> Prop), forall x: Universum, a Universum M P -> a Universum S M -> (exists x0, S x0) -> i Universum S P.
+Theorem Barbari : forall Universum: Type, forall (S M P: Universum -> Prop), a Universum M P -> a Universum S M -> (exists x0, S x0) -> i Universum S P.
 Proof.
-  intros Universum S M P x H1 H2 HE. unfold i. destruct HE as [x0 HS]. unfold a in H1. unfold a in H2. exists x0. split.
+  intros Universum S M P H1 H2 HE. unfold i. destruct HE as [x0 HS]. unfold a in H1. unfold a in H2. exists x0. split.
   - exact HS.
   - specialize (H2 x0). apply H2 in HS. specialize (H1 x0). apply H1 in HS. exact HS.
 Qed.
 
-Theorem Celaront : forall Universum: Type, forall (S M P: Universum -> Prop), forall x: Universum, e Universum M P -> a Universum S M -> (exists x0, S x0) -> o Universum S P.
+Theorem Celaront : forall Universum: Type, forall (S M P: Universum -> Prop), e Universum M P -> a Universum S M -> (exists x0, S x0) -> o Universum S P.
 Proof.
-  intros Universum S M P x H1 H2 He. unfold o. unfold e in H1. unfold a in H2. destruct He. exists x0. intro H_. clear H_. specialize (H2 x0). apply H2 in H. specialize (H1 x0). apply H1 in H. exact H.
+  intros Universum S M P H1 H2 He. unfold o. unfold e in H1. unfold a in H2. destruct He. exists x. intros _. specialize (H2 x). apply H2 in H. specialize (H1 x). apply H1 in H. exact H.
 Qed.
 
 (* 2-я фигура *)
 
-Theorem Baroko : forall Universum: Type, forall (S M P: Universum -> Prop), forall x: Universum, a Universum P M -> o Universum S M -> o Universum S P.
+Theorem Baroko : forall Universum: Type, forall (S M P: Universum -> Prop), a Universum P M -> o Universum S M -> o Universum S P.
 Proof.
-  intros Universum S M P x H1 H2. unfold o. unfold o in H2. destruct H2. exists x0. intro H2. apply H in H2. unfold a in H1. specialize (H1 x0). unfold not. intro H3. apply H1 in H3. apply H2 in H3. exact H3.
+  intros Universum S M P H1 H2. unfold o. unfold o in H2. destruct H2. exists x. intro H2. apply H in H2. unfold a in H1. specialize (H1 x). unfold not. intro H3. apply H1 in H3. apply H2 in H3. exact H3.
 Qed.
 
-Theorem Cesare : forall Universum: Type, forall (S M P: Universum -> Prop), forall x: Universum, e Universum P M -> a Universum S M -> e Universum S P.
+Theorem Cesare : forall Universum: Type, forall (S M P: Universum -> Prop), e Universum P M -> a Universum S M -> e Universum S P.
 Proof.
-  intros Universum S M P x H1 H2. unfold e. intros x0 H3. unfold a in H2. specialize (H2 x0). apply H2 in H3. unfold e in H1. specialize (H1 x0). unfold not. intro HP. apply H1 in HP. contradiction.
+  intros Universum S M P H1 H2. unfold e. intros x H3. unfold a in H2. specialize (H2 x). apply H2 in H3. unfold e in H1. specialize (H1 x). unfold not. intro HP. apply H1 in HP. contradiction.
 Qed.
 
 Theorem Camestres : forall Universum: Type, forall (S M P: Universum -> Prop), e Universum P M -> a Universum S M -> e Universum S P.
 Proof.
   intros Universum S M P H1 H2. unfold e. intros x H3. unfold a in H2.
   specialize (H2 x). apply H2 in H3. clear H2. unfold e in H1. specialize (H1 x). intro HP. apply H1 in HP. contradiction.
+Qed.
+
+Theorem Festino : forall Universum: Type, forall (S M P: Universum -> Prop), e Universum P M -> i Universum S M -> o Universum S P.
+Proof.
+  intros Universum S M P H1 H2. unfold o. unfold i in H2. destruct H2. destruct H. exists x. intros _ HP. unfold e in H1. specialize (H1 x). apply H1 in HP. contradiction.
+Qed.
+
+Theorem Camestrop : forall Universum: Type, forall (S M P: Universum -> Prop), a Universum P M -> e Universum S M -> (exists x0, S x0) -> o Universum S P.
+Proof.
+  intros Universum S M P H1 H2 HE. unfold o. destruct HE. exists x. intros _ HP. unfold e in H2. specialize (H2 x). apply H2 in H. unfold a in H1. specialize (H1 x). apply H1 in HP. contradiction.
+Qed.
+
+Theorem Cesaro : forall Universum: Type, forall (S M P: Universum -> Prop), e Universum P M -> a Universum S M -> (exists x0, S x0) -> o Universum S P.
+Proof.
+  intros Universum S M P H1 H2 HE. unfold o. destruct HE. exists x. intros _ HP. unfold a in H2. specialize (H2 x). apply H2 in H. unfold e in H1. specialize (H1 x). apply H1 in HP. contradiction.
 Qed.
