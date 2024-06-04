@@ -10,6 +10,19 @@ Definition e (Universum: Type) (S: Universum -> Prop) (P: Universum -> Prop) : P
 (* Некоторые S не есть P *)
 Definition o (Universum: Type) (S: Universum -> Prop) (P: Universum -> Prop) : Prop := exists x: Universum, S x /\ not (P x).
 
+Axiom ExclusionMiddle: forall P: Prop, P \/ ~P.
+
+Theorem EquivO (Universum: Type) (S: Universum -> Prop) (P: Universum -> Prop) :
+  o Universum S P <-> (exists x: Universum, (S x /\ not (P x))) \/ not(exists x: Universum, S x).
+Proof.
+  split.
+  - unfold o. intros. destruct H. destruct (ExclusionMiddle (S x)).
+    -- left. exists x. split.
+       --- exact H0.
+       --- apply H in H0. exact H0.
+    -- right. intro.
+Abort.
+
 (* I фигура
 M - P
 S - M
