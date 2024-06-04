@@ -12,6 +12,10 @@ Definition o (Universum: Type) (S: Universum -> Prop) (P: Universum -> Prop) : P
 
 Axiom ExclusionMiddle: forall P: Prop, P \/ ~P.
 
+(* Некоторые S не есть P *)
+(* Definition o (Universum: Type) (S: Universum -> Prop) (P: Universum -> Prop) : Prop := exists x: Universum, S x -> not (P x). *)
+
+
 Theorem EquivO (Universum: Type) (S: Universum -> Prop) (P: Universum -> Prop) :
   o Universum S P <-> (exists x: Universum, (S x /\ not (P x))) \/ not(exists x: Universum, S x).
 Proof.
